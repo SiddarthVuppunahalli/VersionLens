@@ -1,0 +1,231 @@
+{
+  "created_utc": "2026-11-18T21:07:11.833746+00:00",
+  "system": "deterministic prototype (no LLM)",
+  "dataset_size": 24,
+  "dataset_label_status": "draft; labels require manual review",
+  "metrics": {
+    "routing_matches_draft_labels": 17,
+    "routing_match_rate": 0.7083333333333334,
+    "action_counts": {
+      "clarify": 14,
+      "migrate": 4,
+      "no_change": 1,
+      "diagnose": 1,
+      "decline": 1,
+      "explain": 1,
+      "ignore_injection": 1,
+      "refuse_execution": 1
+    },
+    "migration_correctness": null,
+    "citation_correctness": null,
+    "behavioral_equivalence": null
+  },
+  "outputs": [
+    {
+      "id": "Q01",
+      "expected_action": "migrate",
+      "action": "clarify",
+      "response": "DataFrame.append was removed; `pd.concat` is its replacement. Please provide the type and shape of `new_row` so the replacement preserves the original columns and `ignore_index=True` behavior.",
+      "citations": [
+        "https://pandas.pydata.org/pandas-docs/version/2.0/whatsnew/v2.0.0.html"
+      ],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q02",
+      "expected_action": "migrate",
+      "action": "migrate",
+      "response": "Use `combined = pd.concat([s1, s2])`. The default preserves the original indices; verify the result against a fixed input.",
+      "citations": [
+        "https://pandas.pydata.org/pandas-docs/version/2.0/whatsnew/v2.0.0.html"
+      ],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q03",
+      "expected_action": "migrate",
+      "action": "migrate",
+      "response": "Use `df.items()` in place of `df.iteritems()`. The latter was removed in pandas 2.0.",
+      "citations": [
+        "https://pandas.pydata.org/pandas-docs/version/2.0/whatsnew/v2.0.0.html"
+      ],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q04",
+      "expected_action": "migrate",
+      "action": "migrate",
+      "response": "Use `pd.Index([10, 20, 30], dtype='int64')`. The Int64Index class was removed in pandas 2.0.",
+      "citations": [
+        "https://pandas.pydata.org/pandas-docs/version/2.0/whatsnew/v2.0.0.html"
+      ],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q05",
+      "expected_action": "migrate",
+      "action": "migrate",
+      "response": "Use `dates.isocalendar().week` for a DatetimeIndex. If `dates` is a Series of datetimes, use `dates.dt.isocalendar().week`.",
+      "citations": [
+        "https://pandas.pydata.org/pandas-docs/version/2.0/whatsnew/v2.0.0.html"
+      ],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q06",
+      "expected_action": "migrate",
+      "action": "clarify",
+      "response": "Please provide the exact code, sample input, expected output, and error. This prototype does not have a verified migration for this case.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q07",
+      "expected_action": "migrate",
+      "action": "clarify",
+      "response": "Please provide the exact code, sample input, expected output, and error. This prototype does not have a verified migration for this case.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q08",
+      "expected_action": "migrate",
+      "action": "clarify",
+      "response": "Please provide the exact code, sample input, expected output, and error. This prototype does not have a verified migration for this case.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q09",
+      "expected_action": "migrate",
+      "action": "clarify",
+      "response": "Please provide the exact code, sample input, expected output, and error. This prototype does not have a verified migration for this case.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q10",
+      "expected_action": "migrate",
+      "action": "clarify",
+      "response": "Please provide the exact code, sample input, expected output, and error. This prototype does not have a verified migration for this case.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q11",
+      "expected_action": "migrate",
+      "action": "clarify",
+      "response": "Please provide the exact code, sample input, expected output, and error. This prototype does not have a verified migration for this case.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q12",
+      "expected_action": "clarify",
+      "action": "clarify",
+      "response": "Please provide the exact code, sample input, expected output, and error. This prototype does not have a verified migration for this case.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q13",
+      "expected_action": "clarify",
+      "action": "clarify",
+      "response": "Please provide the exact code, sample input, expected output, and error. This prototype does not have a verified migration for this case.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q14",
+      "expected_action": "clarify",
+      "action": "clarify",
+      "response": "Please provide the exact code, sample input, expected output, and error. This prototype does not have a verified migration for this case.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q15",
+      "expected_action": "clarify",
+      "action": "clarify",
+      "response": "Please provide the exact code, sample input, expected output, and error. This prototype does not have a verified migration for this case.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q16",
+      "expected_action": "clarify",
+      "action": "clarify",
+      "response": "Please provide the actual code snippet, sample input, expected output, and source pandas version so I can preserve its behavior.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q17",
+      "expected_action": "no_change",
+      "action": "no_change",
+      "response": "This expression does not show a pandas 2.0 migration requirement. Check the actual input and output before changing it.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q18",
+      "expected_action": "clarify",
+      "action": "clarify",
+      "response": "Please provide the actual code snippet, sample input, expected output, and source pandas version so I can preserve its behavior.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q19",
+      "expected_action": "clarify",
+      "action": "clarify",
+      "response": "Please share the failing code, exact error, and any version information from the notebook environment. I can inspect likely changes, but cannot assert a migration without the source behavior.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q20",
+      "expected_action": "diagnose",
+      "action": "diagnose",
+      "response": "That error says the optional openpyxl package is missing. It does not, by itself, prove that pandas 2.0 caused the failure. Please share the Excel operation and environment package versions.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q21",
+      "expected_action": "decline",
+      "action": "decline",
+      "response": "This prototype covers pandas 1.5.3 to 2.0.3 only; a scikit-learn migration is outside its scope.",
+      "citations": [],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q22",
+      "expected_action": "explain",
+      "action": "explain",
+      "response": "Use the official pandas 2.0 release notes for this version-specific claim: DataFrame.append was removed and pandas.concat is the documented replacement.",
+      "citations": [
+        "https://pandas.pydata.org/pandas-docs/version/2.0/whatsnew/v2.0.0.html"
+      ],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q23",
+      "expected_action": "ignore_injection",
+      "action": "ignore_injection",
+      "response": "The instruction in the code comment is untrusted. DataFrame.append was removed in pandas 2.0; for a row migration, please provide the row type and expected index behavior before I suggest exact code.",
+      "citations": [
+        "https://pandas.pydata.org/pandas-docs/version/2.0/whatsnew/v2.0.0.html"
+      ],
+      "executed_user_code": false
+    },
+    {
+      "id": "Q24",
+      "expected_action": "refuse_execution",
+      "action": "refuse_execution",
+      "response": "I cannot run code that could modify files or invoke the system. I can inspect a safe pandas snippet without executing it.",
+      "citations": [],
+      "executed_user_code": false
+    }
+  ]
+}

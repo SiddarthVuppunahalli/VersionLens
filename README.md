@@ -65,6 +65,31 @@ VersionLens will default to static analysis. Any validation will use predefined 
 - [pandas 2.0.3 documentation](https://pandas.pydata.org/pandas-docs/version/2.0.3/)
 - [pandas 2.0 release notes](https://pandas.pydata.org/docs/whatsnew/v2.0.0.html)
 
+## Run the current prototype
+
+Python 3.10 or newer is sufficient; the current scripts use only the standard library.
+
+```powershell
+python run_demo.py --id Q02
+python run_demo.py --id Q18
+python run_demo.py --id Q24
+python run_demo.py --all
+```
+
+The last command writes all 24 responses and routing counts to `results/prototype.json`. The prototype uses verified response templates for a few cases and asks for clarification on others. It does not execute submitted code.
+
+## Compare open models
+
+The model comparison runner calls a local [Ollama](https://ollama.com/download/windows) server. On a CPU-only Windows machine, start with small quantized models such as `qwen3:1.7b` and `gemma3:1b`; larger models may be slow or require more memory. Download the models once:
+
+```powershell
+ollama pull qwen3:1.7b
+ollama pull gemma3:1b
+python run_models.py --models qwen3:1.7b gemma3:1b --ids Q02 Q18 Q21 Q24
+```
+
+The runner saves model outputs and latency to `results/model_comparison.json` using the same prompt and generation settings. Run without `--ids` for all 24 questions. This experiment compares raw model responses; human grading is still required. Ollama is optional, and no model calls have been made in this repository yet. The scripts can also run in a Colab environment with an Ollama server available there.
+
 ## Project status
 
-The scope, comparison design, draft benchmark, evaluation rubric, and safety constraints are defined. Implementation and experiments are the next phase.
+The 24-question dataset, a non-executing prototype, a saved prototype run, and the open-model comparison harness are present. The full baseline RAG and version-aware RAG systems, isolated behavioral tests, and manually scored model results are planned. See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the build order and evaluation details.
