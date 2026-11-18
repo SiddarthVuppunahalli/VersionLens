@@ -80,12 +80,12 @@ The last command writes all 24 responses and routing counts to `results/prototyp
 
 ## Compare open models
 
-The model comparison runner calls a local [Ollama](https://ollama.com/download/windows) server. On a CPU-only Windows machine, start with small quantized models such as `qwen3:1.7b` and `gemma3:1b`; larger models may be slow or require more memory. Download the models once:
+The model comparison runner calls a local [Ollama](https://ollama.com/download/windows) server. On a CPU-only Windows machine, start with small quantized, Apache-licensed models such as `qwen3:1.7b` and `qwen2.5-coder:1.5b`; larger models may be slow or require more memory. Download the models once:
 
 ```powershell
 ollama pull qwen3:1.7b
-ollama pull gemma3:1b
-python run_models.py --models qwen3:1.7b gemma3:1b --ids Q02 Q18 Q21 Q24
+ollama pull qwen2.5-coder:1.5b
+python run_models.py --models qwen3:1.7b qwen2.5-coder:1.5b --ids Q02 Q18 Q21 Q24
 ```
 
 The runner saves model outputs and latency to `results/model_comparison.json` using the same prompt and generation settings. Run without `--ids` for all 24 questions. This experiment compares raw model responses; human grading is still required. Ollama is optional, and no model calls have been made in this repository yet. The scripts can also run in a Colab environment with an Ollama server available there.

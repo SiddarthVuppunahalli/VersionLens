@@ -32,6 +32,6 @@ This repository currently contains a question set, a non-executing prototype, an
 1. Run `python run_demo.py --id Q02` for a documented migration.
 2. Run `python run_demo.py --id Q18` for a follow-up question, `--id Q21` for out-of-scope handling, and `--id Q24` for unsafe-execution refusal.
 3. Run `python run_demo.py --all` to save every prototype answer and routing counts in `results/prototype.json`.
-4. With Ollama installed and two models downloaded, run `python run_models.py --models qwen3:1.7b gemma3:1b --ids Q02 Q18 Q21 Q24` to save real model outputs. Manually score them before describing quality differences.
+4. With Ollama installed and two models downloaded, run `python run_models.py --models qwen3:1.7b qwen2.5-coder:1.5b --ids Q02 Q18 Q21 Q24` to save real model outputs. Manually score them before describing quality differences.
 
 The prototype is deterministic and does not use an LLM or retrieval. Its routing match rate is a smoke-check against draft action labels, not migration accuracy. The model harness currently compares raw model responses under the same prompt; it does not implement either RAG configuration yet.
