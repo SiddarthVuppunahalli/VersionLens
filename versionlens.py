@@ -52,6 +52,20 @@ def retrieve_evidence(query: str) -> list[dict]:
     return [entries[item] for item in ids]
 
 
+def validate_model_answer(query: str, response: str, evidence: list[dict]) -> str | None:
+    """Return a failure reason for the one migration with a checked invariant."""
+    if "s1.append(s2)" not in query.lower():
+        return None
+    compact = re.sub(r"\s+", "", response.lower())
+    if "pd.concat([s1,s2]" not in compact and "pandas.concat([s1,s2]" not in compact:
+        return "missing expected pandas.concat migration"
+    if "ignore_index=true" in compact:
+        return "ignore_index=True discards the original indices"
+    if not any(entry["url"] in response for entry in evidence):
+        return "missing official citation in answer"
+    return None
+
+
 def answer(query: str) -> dict:
     """Return only a supported template or a clarification; never execute query text."""
     lower = query.lower()

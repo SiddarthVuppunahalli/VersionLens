@@ -2,7 +2,7 @@ import json
 import unittest
 from unittest.mock import patch
 
-from versionlens import preflight, questions, retrieve_evidence
+from versionlens import preflight, questions, retrieve_evidence, validate_model_answer
 from run_models import call_ollama
 
 
@@ -46,6 +46,15 @@ class PipelineTests(unittest.TestCase):
         self.assertFalse(captured["think"])
         self.assertEqual(captured["options"]["num_predict"], 700)
         self.assertIn("pandas.pydata.org", captured["messages"][1]["content"])
+
+    def test_index_preservation_check_rejects_contradictory_code(self):
+        query = next(row["query"] for row in questions() if row["id"] == "Q02")
+        evidence = retrieve_evidence(query)
+        bad = "combined = pd.concat([s1, s2], ignore_index=True)"
+        self.assertIn("discards", validate_model_answer(query, bad, evidence))
+        good = ("combined = pd.concat([s1, s2], ignore_index=False)\n"
+                + evidence[1]["url"])
+        self.assertIsNone(validate_model_answer(query, good, evidence))
 
 
 if __name__ == "__main__":

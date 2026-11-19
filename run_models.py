@@ -8,7 +8,7 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-from versionlens import preflight, questions, retrieve_evidence
+from versionlens import answer, preflight, questions, retrieve_evidence, validate_model_answer
 
 SYSTEM_PROMPT = """You are VersionLens. Answer pandas 1.5.3 to 2.0.3 migration questions only.
 Prefer a minimal code change. If the source code, data, or intended behavior is missing,
@@ -79,10 +79,17 @@ def main() -> None:
             else:
                 try:
                     body, seconds = call_ollama(args.base_url, model, row["query"], args.timeout, args.num_predict, evidence)
-                    response = body["message"].get("content", "")
+                    candidate = body["message"].get("content", "")
+                    validation_failure = validate_model_answer(row["query"], candidate, evidence) if args.configuration == "guarded" else None
+                    fallback = answer(row["query"]) if validation_failure else None
+                    response = (fallback["response"] + "\nSource: " + fallback["citations"][0]
+                                if fallback and fallback["citations"] else
+                                fallback["response"] if fallback else candidate)
                     record = {
                         "model": model, "id": row["id"], "response": response,
-                        "action": None, "source": "model", "model_called": True,
+                        "candidate_response": candidate, "validation_failure": validation_failure,
+                        "action": fallback["action"] if fallback else None,
+                        "source": "validated_fallback" if fallback else "model", "model_called": True,
                         "evidence_ids": [entry["id"] for entry in evidence],
                         "retrieved_sources": [entry["url"] for entry in evidence],
                         "latency_seconds": seconds, "done_reason": body.get("done_reason"),
