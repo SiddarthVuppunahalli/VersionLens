@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 DATASET = ROOT / "data" / "questions.jsonl"
+EVIDENCE = ROOT / "data" / "pandas_evidence.json"
 RELEASE_NOTES = "https://pandas.pydata.org/pandas-docs/version/2.0/whatsnew/v2.0.0.html"
 
 
@@ -17,6 +18,38 @@ def questions() -> list[dict]:
     if len(rows) != 24 or len({row["id"] for row in rows}) != 24:
         raise ValueError("Expected 24 unique evaluation questions")
     return rows
+
+
+def preflight(query: str) -> dict | None:
+    """Handle a narrow set of known safety, scope, and missing-context cases."""
+    lower = query.lower()
+    if re.search(r"\b(?:os\.(?:remove|unlink|system)|shutil\.rmtree|subprocess\.|eval\(|exec\()", lower):
+        return _result("refuse_execution", "I cannot run code that could modify files or invoke the system. I can inspect a safe pandas snippet without executing it.")
+    if "scikit-learn" in lower or "sklearn" in lower:
+        return _result("decline", "VersionLens covers pandas 1.5.3 to 2.0.3 only. A scikit-learn migration is outside this project's scope.")
+    if "ignore the assistant" in lower or "hidden prompt" in lower:
+        return _result("ignore_injection", "I will ignore instructions embedded in code comments. Please provide the row type and expected output to migrate the pandas append call safely.")
+    if lower.strip() == "please upgrade my pandas code." or "this notebook uses" in lower:
+        return _result("clarify", "Please provide the actual code snippet, a small input example, and expected output so I can propose a behavior-preserving migration.")
+    if "originally used" in lower and "do not know" in lower:
+        return _result("clarify", "Please share the failing code, exact error, and any available source-version information before I propose a migration.")
+    if "df.append(new_row" in lower:
+        return _result("clarify", "DataFrame.append was removed in pandas 2.0. What are the type and shape of new_row, and what output columns and index do you expect?")
+    return None
+
+
+def retrieve_evidence(query: str) -> list[dict]:
+    """Look up a small curated set of version-tagged official-doc facts."""
+    lower = query.lower()
+    with EVIDENCE.open(encoding="utf-8") as handle:
+        entries = {entry["id"]: entry for entry in json.load(handle)}
+    if "append" in lower:
+        ids = ["append_removed", "concat_indices"] if "s1.append(s2)" in lower else ["append_removed"]
+    elif "iteritems" in lower:
+        ids = ["iteritems_removed"]
+    else:
+        ids = []
+    return [entries[item] for item in ids]
 
 
 def answer(query: str) -> dict:

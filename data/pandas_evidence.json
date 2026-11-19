@@ -1,0 +1,23 @@
+[
+  {
+    "id": "append_removed",
+    "version": "2.0.3",
+    "url": "https://pandas.pydata.org/pandas-docs/version/2.0/whatsnew/v2.0.0.html",
+    "section": "Removal of prior version deprecations and changes",
+    "summary": "Series.append and DataFrame.append were removed in pandas 2.0; use pandas.concat instead."
+  },
+  {
+    "id": "concat_indices",
+    "version": "2.0.3",
+    "url": "https://pandas.pydata.org/pandas-docs/version/2.0/user_guide/merging.html",
+    "section": "Concatenating objects",
+    "summary": "pandas.concat has ignore_index=False by default. Setting it to True discards labels on the concatenation axis; False preserves them."
+  },
+  {
+    "id": "iteritems_removed",
+    "version": "2.0.3",
+    "url": "https://pandas.pydata.org/pandas-docs/version/2.0/whatsnew/v2.0.0.html",
+    "section": "Removal of prior version deprecations and changes",
+    "summary": "Series.iteritems and DataFrame.iteritems were removed; use obj.items instead."
+  }
+]

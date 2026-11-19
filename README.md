@@ -88,7 +88,9 @@ ollama pull qwen2.5-coder:1.5b
 python run_models.py --models qwen3:1.7b qwen2.5-coder:1.5b --ids Q02 Q18 Q21 Q24
 ```
 
-The runner saves model outputs, latency, finish reason, and generated-token count to `results/model_comparison.json` using the same prompt and generation settings. It requests a final answer without a separate thinking trace and marks empty answers as errors. Run without `--ids` for all 24 questions. This experiment compares raw model responses; human grading is still required. Ollama is optional. The scripts can also run in a Colab environment with an Ollama server available there.
+The default `guarded` configuration handles known unsafe, out-of-scope, and missing-context cases before calling a model. It supplies a small curated set of version-tagged official pandas facts for supported migrations. The JSON records `source: preflight` and `model_called: false` for deterministic answers, and `retrieved_sources` for model answers. This is a scoped prototype, not the full RAG system or a general-purpose sandbox. Review whether each model actually cites and uses its supplied sources.
+
+The runner saves outputs, latency, finish reason, and generated-token count to `results/model_comparison.json`. It requests a final answer without a separate thinking trace and marks empty answers as errors. Run without `--ids` for all 24 questions. Use `--configuration raw --output results/raw_comparison.json` to reproduce the unguarded model-only comparison. Keep raw and guarded results separate: preflight answers are system behavior, not model successes. Human grading is still required. Ollama is optional. The scripts can also run in a Colab environment with an Ollama server available there.
 
 ## Project status
 
