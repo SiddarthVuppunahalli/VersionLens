@@ -1,18 +1,18 @@
 # Implementation plan
 
-This repository currently contains a question set, a non-executing prototype, a local open-model comparison harness, and cross-version fixtures for Q02 and Q03. The research system described in the proposal is still to be built. Keep experimental results separate from prototype routing results.
+This repository currently contains a question set, a non-executing prototype, a local open-model comparison harness, cross-version fixtures for Q02 and Q03, and a six-question retrieval pilot. The six pilot labels were approved by the project owner. Keep experimental results separate from prototype routing results.
 
 ## 1. Freeze the evaluation set
 
-- Review the 24 draft questions in `data/questions.jsonl` before running experiments. For each case, add a manually checked expected response, acceptable migration, official source passage, and whether an equivalence test applies.
+- The six pilot labels in `data/pilot_labels.jsonl` have been reviewed and approved. Extend the same format to all 24 questions in `data/questions.jsonl` after the pilot.
 - Record uncertain or disputed cases explicitly. Do not turn a missing snippet into an invented gold answer.
 - Keep the same question IDs, prompts, and labels across all models and configurations. Reserve any later examples as a separate development set.
 
 ## 2. Build the two retrieval configurations
 
-- Download a small, fixed set of official pandas 1.5.3 and 2.0.3 documentation pages and the 2.0 release notes. Store source URL, version, section, and retrieval text for each passage.
-- Baseline: semantic search across the combined passages, without version filtering or code analysis.
-- Version-aware system: infer or request source and target versions, parse supplied Python with `ast` without running it, filter by version, and combine keyword and semantic retrieval.
+- The current pilot has six curated summaries of official pandas 1.5.3 and 2.0.3 pages. Expand this to a fixed set of real, versioned documentation passages with source URL, section, and API metadata.
+- The pilot baseline performs semantic search across the combined summaries, without version filtering or code analysis.
+- The pilot version-aware path uses the same embeddings, filters to pandas 2.0.3, parses simple dotted calls with `ast` without running them, and combines semantic and token matching. Extend this parser to handle aliases and more complex snippets.
 - Keep the generator model, prompt budget, temperature, and question order fixed when comparing configurations.
 
 ## 3. Generate and validate carefully

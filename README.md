@@ -107,6 +107,21 @@ The default `guarded` configuration handles known unsafe, out-of-scope, and miss
 
 The runner saves outputs, latency, finish reason, and generated-token count to `results/model_comparison.json`. It requests a final answer without a separate thinking trace and marks empty answers as errors. Run without `--ids` for all 24 questions. Use `--configuration raw --output results/raw_comparison.json` to reproduce the unguarded model-only comparison. Keep raw and guarded results separate: preflight answers are system behavior, not model successes. Human grading is still required. Ollama is optional. The scripts can also run in a Colab environment with an Ollama server available there.
 
+## Six-question retrieval pilot
+
+`data/pilot_labels.jsonl` contains user-approved labels for Q02, Q03, Q17, Q18, Q21, and Q24. They are not passed to the generator. `data/pilot_corpus.jsonl` contains six human-curated summaries of official pandas pages, each with a version, API, section, and URL. These summaries are a small pilot corpus, not a complete documentation index.
+
+With Ollama running locally or in Colab, pull the open embedding model and run retrieval before generation:
+
+```powershell
+ollama pull nomic-embed-text
+python run_retrieval.py --output results/retrieval_pilot.json
+python run_rag.py --models qwen3:1.7b --retrieval results/retrieval_pilot.json --output results/rag_pilot.json
+python make_score_sheet.py --run results/rag_pilot.json --output results/pilot_score_sheet.csv
+```
+
+The baseline ranks all corpus records by semantic embedding similarity. The version-aware path filters to pandas 2.0.3 and combines semantic similarity with token and parsed API-call matching. Both use the same corpus, embedding model, top-two passage budget, generator model, and generation settings. Both also share the same preflight rule for missing context, out-of-scope requests, and unsafe code; those records show `model_called: false`. The run files preserve retrieved passage IDs and URLs for inspection. The score sheet leaves correctness fields blank for human review; it does not score models automatically.
+
 ## Project status
 
-The 24-question dataset, a non-executing prototype, a saved prototype run, two cross-version behavioral fixtures, and the open-model comparison harness are present. The full baseline RAG and version-aware RAG systems, broader behavioral tests, and manually scored model results are planned. See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the build order and evaluation details.
+The 24-question dataset, a non-executing prototype, two cross-version behavioral fixtures, an open-model comparison harness, and a six-question retrieval pilot are present. The pilot labels are approved. A larger documentation index, broader behavioral tests, and manually scored results are planned. See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the build order and evaluation details.
