@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-11-19T19:59:31.308907+00:00",
+  "created_utc": "2026-11-19T20:28:04.929726+00:00",
   "environments": {
     "original": {
       "python_version": "3.10.2",
@@ -134,6 +134,285 @@
           ]
         }
       ]
+    },
+    "Q04": {
+      "equivalent": true,
+      "original": {
+        "values": [
+          10,
+          20,
+          30
+        ],
+        "dtype": "int64",
+        "name": null
+      },
+      "migration": {
+        "values": [
+          10,
+          20,
+          30
+        ],
+        "dtype": "int64",
+        "name": null
+      }
+    },
+    "Q05": {
+      "equivalent": true,
+      "original": {
+        "dates": [
+          "2020-12-28",
+          "2020-12-29",
+          "2020-12-30",
+          "2020-12-31",
+          "2021-01-01",
+          "2021-01-02",
+          "2021-01-03",
+          "2021-01-04",
+          "2021-01-05"
+        ],
+        "weeks": [
+          53,
+          53,
+          53,
+          53,
+          53,
+          53,
+          53,
+          1,
+          1
+        ]
+      },
+      "migration": {
+        "dates": [
+          "2020-12-28",
+          "2020-12-29",
+          "2020-12-30",
+          "2020-12-31",
+          "2021-01-01",
+          "2021-01-02",
+          "2021-01-03",
+          "2021-01-04",
+          "2021-01-05"
+        ],
+        "weeks": [
+          53,
+          53,
+          53,
+          53,
+          53,
+          53,
+          53,
+          1,
+          1
+        ]
+      }
+    },
+    "Q06": {
+      "equivalent": true,
+      "original": {
+        "samples": [
+          [
+            1,
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          []
+        ],
+        "results": [
+          true,
+          false,
+          true,
+          true
+        ]
+      },
+      "migration": {
+        "samples": [
+          [
+            1,
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          []
+        ],
+        "results": [
+          true,
+          false,
+          true,
+          true
+        ]
+      }
+    },
+    "Q07": {
+      "equivalent": true,
+      "original": {
+        "csv": "name,count\na,1\nb,2\n"
+      },
+      "migration": {
+        "csv": "name,count\na,1\nb,2\n"
+      }
+    },
+    "Q08": {
+      "equivalent": true,
+      "original": {
+        "values": [
+          [
+            1
+          ],
+          [
+            2
+          ]
+        ],
+        "index": [
+          0,
+          1
+        ],
+        "columns": [
+          "new"
+        ],
+        "dtypes": [
+          "int64"
+        ],
+        "shape": [
+          2,
+          1
+        ]
+      },
+      "migration": {
+        "values": [
+          [
+            1
+          ],
+          [
+            2
+          ]
+        ],
+        "index": [
+          0,
+          1
+        ],
+        "columns": [
+          "new"
+        ],
+        "dtypes": [
+          "int64"
+        ],
+        "shape": [
+          2,
+          1
+        ]
+      }
+    },
+    "Q09": {
+      "equivalent": true,
+      "original": {
+        "values": [
+          [
+            "a",
+            1
+          ],
+          [
+            "b",
+            3
+          ]
+        ],
+        "index": [
+          0,
+          1
+        ],
+        "columns": [
+          "name",
+          "count"
+        ],
+        "dtypes": [
+          "object",
+          "int64"
+        ],
+        "shape": [
+          2,
+          2
+        ]
+      },
+      "migration": {
+        "values": [
+          [
+            "a",
+            1
+          ],
+          [
+            "b",
+            3
+          ]
+        ],
+        "index": [
+          0,
+          1
+        ],
+        "columns": [
+          "name",
+          "count"
+        ],
+        "dtypes": [
+          "object",
+          "int64"
+        ],
+        "shape": [
+          2,
+          2
+        ]
+      }
+    },
+    "Q10": {
+      "equivalent": true,
+      "original": {
+        "values": [
+          1,
+          2
+        ],
+        "index": [
+          0,
+          1
+        ],
+        "index_dtype": "int64",
+        "index_name": null,
+        "dtype": "int64",
+        "name": "score",
+        "shape": [
+          2
+        ]
+      },
+      "migration": {
+        "values": [
+          1,
+          2
+        ],
+        "index": [
+          0,
+          1
+        ],
+        "index_dtype": "int64",
+        "index_name": null,
+        "dtype": "int64",
+        "name": "score",
+        "shape": [
+          2
+        ]
+      }
     }
   },
   "passed": true,

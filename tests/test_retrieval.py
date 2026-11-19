@@ -1,4 +1,5 @@
 import unittest
+from pathlib import Path
 
 from make_score_sheet import load_labels
 from retrieval import api_tokens, cosine, passages, retrieve
@@ -9,6 +10,12 @@ class RetrievalTests(unittest.TestCase):
         rows = passages()
         self.assertEqual(len(rows), 6)
         self.assertEqual({row["version"] for row in rows}, {"1.5.3", "2.0.3"})
+        self.assertTrue(all(row["url"].startswith("https://pandas.pydata.org/") for row in rows))
+
+    def test_expanded_corpus_has_unique_official_sources(self):
+        rows = passages(Path("data/expanded_corpus.jsonl"))
+        self.assertGreater(len(rows), 6)
+        self.assertEqual(len(rows), len({row["id"] for row in rows}))
         self.assertTrue(all(row["url"].startswith("https://pandas.pydata.org/") for row in rows))
 
     def test_pilot_labels_are_approved_and_distinct(self):

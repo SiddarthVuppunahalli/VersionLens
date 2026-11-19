@@ -6,6 +6,7 @@ This module never evaluates a model-generated or user-supplied snippet.
 import argparse
 import json
 import platform
+from io import StringIO
 
 import numpy as np
 import pandas as pd
@@ -20,6 +21,16 @@ def series_snapshot(series):
         "dtype": str(series.dtype),
         "name": series.name,
         "shape": list(series.shape),
+    }
+
+
+def frame_snapshot(frame):
+    return {
+        "values": frame.values.tolist(),
+        "index": frame.index.tolist(),
+        "columns": frame.columns.tolist(),
+        "dtypes": [str(dtype) for dtype in frame.dtypes],
+        "shape": list(frame.shape),
     }
 
 
@@ -49,6 +60,62 @@ def q03(version):
     }
 
 
+def q04(version):
+    result = pd.Int64Index([10, 20, 30]) if version == "1.5.3" else pd.Index([10, 20, 30], dtype="int64")
+    return {"observed": {"values": result.tolist(), "dtype": str(result.dtype), "name": result.name}}
+
+
+def q05(version):
+    dates = pd.date_range("2020-12-28", periods=9, freq="D")
+    weeks = dates.weekofyear if version == "1.5.3" else dates.isocalendar().week
+    # The result dtype differs; the declared invariant is ISO week values and dates.
+    return {"observed": {"dates": [str(day.date()) for day in dates], "weeks": weeks.tolist()}}
+
+
+def q06(version):
+    samples = [[1, 2, 2], [3, 1], [2, 2], []]
+    results = []
+    for sample in samples:
+        index = pd.Index(sample)
+        results.append(bool(index.is_monotonic if version == "1.5.3" else index.is_monotonic_increasing))
+    return {"observed": {"samples": samples, "results": results}}
+
+
+def q07(version):
+    frame = pd.DataFrame({"name": ["a", "b"], "count": [1, 2]})
+    buffer = StringIO()
+    keyword = {"line_terminator": "\n"} if version == "1.5.3" else {"lineterminator": "\n"}
+    frame.to_csv(buffer, index=False, **keyword)
+    return {"observed": {"csv": buffer.getvalue()}}
+
+
+def q08(version):
+    frame = pd.DataFrame({"old": [1, 2]})
+    if version == "1.5.3":
+        frame.set_axis(["new"], axis=1, inplace=True)
+    else:
+        frame = frame.set_axis(["new"], axis=1)
+    return {"observed": frame_snapshot(frame)}
+
+
+def q09(version):
+    malformed = "name,count\na,1\nwrong,2,extra\nb,3\n"
+    if version == "1.5.3":
+        result = pd.read_csv(StringIO(malformed), error_bad_lines=False, warn_bad_lines=True)
+    else:
+        result = pd.read_csv(StringIO(malformed), on_bad_lines="warn")
+    return {"observed": frame_snapshot(result)}
+
+
+def q10(version):
+    one_column = "score\n1\n2\n"
+    if version == "1.5.3":
+        result = pd.read_csv(StringIO(one_column), squeeze=True)
+    else:
+        result = pd.read_csv(StringIO(one_column)).squeeze("columns")
+    return {"observed": series_snapshot(result)}
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--target", choices=("1.5.3", "2.0.3"), required=True)
@@ -62,8 +129,14 @@ def main():
         "removed_api_available": {
             "Series.append": hasattr(pd.Series, "append"),
             "DataFrame.iteritems": hasattr(pd.DataFrame, "iteritems"),
+            "Int64Index": hasattr(pd, "Int64Index"),
+            "Index.is_monotonic": hasattr(pd.Index, "is_monotonic"),
         },
-        "cases": {"Q02": q02(args.target), "Q03": q03(args.target)},
+        "cases": {case_id: fn(args.target) for case_id, fn in (
+            ("Q02", q02), ("Q03", q03), ("Q04", q04), ("Q05", q05),
+            ("Q06", q06), ("Q07", q07), ("Q08", q08),
+            ("Q09", q09), ("Q10", q10),
+        )},
     }))
 
 

@@ -80,7 +80,7 @@ The last command writes all 24 responses and routing counts to `results/prototyp
 
 ## Run cross-version behavior tests
 
-These trusted fixtures compare Q02 (`Series.append` to `pd.concat`) and Q03 (`DataFrame.iteritems` to `items`) under their respective pandas versions. On Windows with Python 3.10 or 3.11:
+These trusted fixtures compare Q02–Q10 under pandas 1.5.3 and 2.0.3. They cover append, iteritems, Int64Index, ISO week values, monotonicity, CSV line endings, set_axis assignment, bad-line CSV parsing, and one-column CSV squeezing. On Windows with Python 3.10 or 3.11:
 
 ```powershell
 python -m venv .venv15
@@ -91,7 +91,7 @@ python run_behavior_tests.py
 python -m unittest discover -s tests -v
 ```
 
-The runner writes `results/behavior_validation.json`, including both environment versions, values, labels, dtypes, and shapes. Q02 deliberately includes duplicate index labels and a wrong `ignore_index=True` negative control; the run fails if that wrong output is not distinguishable. Only predefined fixtures run. This verifies two specific migrations, not arbitrary submitted code or the model-generated response.
+The runner writes `results/behavior_validation.json`, including both environment versions and case snapshots. Q02 deliberately includes duplicate index labels and a wrong `ignore_index=True` negative control; the run fails if that wrong output is not distinguishable. Q05 compares ISO week values but does not require the result dtype to match. Q09 compares parsed rows but does not grade warning text. Only predefined fixtures run; this does not validate arbitrary submitted code or model-generated snippets.
 
 ## Compare open models
 
@@ -126,6 +126,22 @@ The baseline ranks all corpus records by semantic embedding similarity. The vers
 
 The project owner reviewed the uploaded pilot run's scores. The [reviewed score record](results/pilot_scored.json) includes per-case judgments, source-file hashes, and limitations. Across the two model-backed migration questions (Q02 and Q03), Qwen3 scored 3/4 points with baseline retrieval and 4/4 with version-aware retrieval. Qwen 2.5 Coder scored 1/4 in both configurations. Qwen3 supplied supporting citations for both migration answers in both configurations; Qwen 2.5 Coder supplied none. All four model/configuration combinations answered the unchanged-code case correctly. The three clarification, scope, and unsafe-code cases were handled by the same preflight rules and are excluded from model averages. This small pilot does not establish a general performance advantage.
 
+## Larger test run
+
+The expanded corpus has 13 curated summaries from official pandas documentation. The project owner approved seven more gold labels (Q04–Q10), making 13 approved labels total. Nine migration cases (Q02–Q10) now have trusted cross-version fixtures. The 24-question retrieval run marks which questions have relevant curated evidence. For uncovered questions, the generation runner records an `evidence_gap` clarification and does not call a model. These responses should be reported separately from model results.
+
+With Ollama and `nomic-embed-text` available, run:
+
+```powershell
+python run_behavior_tests.py
+python -m unittest discover -s tests -v
+python run_retrieval.py --all --corpus data/expanded_corpus.jsonl --coverage data/expanded_coverage.json --output results/retrieval_expanded.json
+python run_rag.py --models qwen3:1.7b qwen2.5-coder:1.5b --retrieval results/retrieval_expanded.json --output results/rag_expanded.json
+python make_score_sheet.py --run results/rag_expanded.json --labels data/pilot_labels.jsonl data/expanded_labels.jsonl --skip-unlabeled --output results/expanded_score_sheet.csv
+```
+
+The score sheet includes only questions with approved labels and leaves judgment fields blank for human review. The nine fixed fixtures establish that the *known migration examples* preserve their declared outputs; model responses must still be checked against those labels. The current curated corpus has evidence for 11 questions, including Q17 and Q22. The remaining questions help measure preflight and evidence-gap behavior but are not ready for migration accuracy scoring.
+
 ## Project status
 
-The 24-question dataset, a non-executing prototype, two cross-version behavioral fixtures, an open-model comparison harness, and a reviewed six-question retrieval pilot are present. A larger documentation index, broader behavioral tests, and a larger manually scored evaluation are planned. See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the build order and evaluation details.
+The 24-question dataset, a non-executing prototype, nine cross-version behavioral fixtures, an open-model comparison harness, and a reviewed six-question retrieval pilot are present. A 24-question retrieval harness and 13 approved gold labels are ready for a larger model run. A broader documentation index and larger manually scored evaluation remain planned. See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the build order and evaluation details.

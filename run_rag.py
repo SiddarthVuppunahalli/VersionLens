@@ -34,6 +34,10 @@ def main():
                     record.update({"response": guard["response"], "source": "preflight",
                                    "model_called": False, "action": guard["action"],
                                    "latency_seconds": 0, "done_reason": None, "error": None})
+                elif row.get("evidence_ready") is False:
+                    record.update({"response": "The current curated evidence does not cover this case. Please provide the code and expected behavior, or expand the documentation corpus before evaluating a migration.",
+                                   "source": "evidence_gap", "model_called": False, "action": "clarify",
+                                   "latency_seconds": 0, "done_reason": None, "error": None})
                 else:
                     try:
                         body, seconds = call_ollama(args.base_url, model, row["query"], 300,
@@ -52,7 +56,7 @@ def main():
                 args.output.write_text(json.dumps({
                     "created_utc": datetime.now(timezone.utc).isoformat(),
                     "retrieval_file": str(args.retrieval),
-                    "labels_review_status": "approved; no scores computed",
+                    "label_usage": "Gold labels are not read by the generator; no scores computed",
                     "generation": f"temperature=0, seed=42, think=false, num_predict={args.num_predict}",
                     "records": records,
                 }, indent=2) + "\n", encoding="utf-8")

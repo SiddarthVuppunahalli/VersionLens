@@ -40,7 +40,7 @@ def compare(old: dict, new: dict) -> dict:
     passed = all(row["equivalent"] for row in cases.values()) and cases.get("Q02", {}).get("negative_control_differs", False)
     api_transition = all(
         old["removed_api_available"][api] and not new["removed_api_available"][api]
-        for api in ("Series.append", "DataFrame.iteritems")
+        for api in ("Series.append", "DataFrame.iteritems", "Int64Index", "Index.is_monotonic")
     )
     return {
         "created_utc": datetime.now(timezone.utc).isoformat(),

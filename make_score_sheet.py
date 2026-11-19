@@ -1,4 +1,4 @@
-"""Create a human-review sheet from a completed six-question RAG run."""
+"""Create a human-review sheet from approved labels and a completed RAG run."""
 
 import argparse
 import csv
@@ -13,11 +13,16 @@ FIELDS = (
 )
 
 
-def load_labels() -> dict:
-    with LABELS.open(encoding="utf-8") as handle:
-        labels = [json.loads(line) for line in handle if line.strip()]
-    if len(labels) != 6 or any(row["review_status"] != "approved" for row in labels):
-        raise ValueError("Six approved pilot labels are required before scoring")
+def load_labels(paths=None) -> dict:
+    paths = paths or [LABELS]
+    labels = []
+    for path in paths:
+        with path.open(encoding="utf-8") as handle:
+            labels.extend(json.loads(line) for line in handle if line.strip())
+    if not labels or any(row["review_status"] != "approved" for row in labels):
+        raise ValueError("All score-sheet labels must be approved")
+    if len({row["id"] for row in labels}) != len(labels):
+        raise ValueError("Duplicate gold-label ID")
     return {row["id"]: row for row in labels}
 
 
@@ -25,17 +30,24 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--run", type=Path, default=Path("results/rag_pilot.json"))
     parser.add_argument("--output", type=Path, default=Path("results/pilot_score_sheet.csv"))
+    parser.add_argument("--labels", type=Path, nargs="+", default=[LABELS])
+    parser.add_argument("--skip-unlabeled", action="store_true")
     args = parser.parse_args()
-    labels = load_labels()
+    labels = load_labels(args.labels)
     run = json.loads(args.run.read_text(encoding="utf-8"))
     records = run["records"]
-    if not records or any(row["id"] not in labels for row in records):
-        raise ValueError("Run contains no pilot records or an unknown question ID")
+    if not records:
+        raise ValueError("Run contains no records")
+    unlabeled = {row["id"] for row in records if row["id"] not in labels}
+    if unlabeled and not args.skip_unlabeled:
+        raise ValueError(f"Unlabeled question IDs: {', '.join(sorted(unlabeled))}")
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("w", newline="", encoding="utf-8-sig") as handle:
         writer = csv.DictWriter(handle, fieldnames=FIELDS)
         writer.writeheader()
         for record in records:
+            if record["id"] not in labels:
+                continue
             label = labels[record["id"]]
             writer.writerow({
                 "model": record["model"], "configuration": record["configuration"],
@@ -48,7 +60,7 @@ def main():
                 "retrieved_ids": ", ".join(record["retrieved_ids"]),
                 "response": record["response"] or "",
             })
-    print(f"Saved {len(records)} unscored rows to {args.output}")
+    print(f"Saved {sum(row['id'] in labels for row in records)} unscored rows to {args.output}; skipped {len(unlabeled)} unlabeled question IDs")
 
 
 if __name__ == "__main__":

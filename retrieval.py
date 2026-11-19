@@ -1,4 +1,4 @@
-"""Pilot semantic baseline and version-aware hybrid retrieval over fixed summaries."""
+"""Semantic baseline and version-aware retrieval over fixed summaries."""
 
 import ast
 import json
@@ -10,8 +10,8 @@ from pathlib import Path
 CORPUS = Path(__file__).resolve().parent / "data" / "pilot_corpus.jsonl"
 
 
-def passages() -> list[dict]:
-    with CORPUS.open(encoding="utf-8") as handle:
+def passages(path: Path = CORPUS) -> list[dict]:
+    with path.open(encoding="utf-8") as handle:
         rows = [json.loads(line) for line in handle if line.strip()]
     if len({row["id"] for row in rows}) != len(rows):
         raise ValueError("Duplicate passage ID")
