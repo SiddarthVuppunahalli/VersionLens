@@ -142,6 +142,19 @@ python make_score_sheet.py --run results/rag_expanded.json --labels data/pilot_l
 
 The score sheet includes only questions with approved labels and leaves judgment fields blank for human review. The nine fixed fixtures establish that the *known migration examples* preserve their declared outputs; model responses must still be checked against those labels. The current curated corpus has evidence for 11 questions, including Q17 and Q22. The remaining questions help measure preflight and evidence-gap behavior but are not ready for migration accuracy scoring.
 
+### Reviewed expanded outcome
+
+The project owner approved the [per-answer judgments](results/expanded_score_sheet_reviewed.csv). The [scored record](results/expanded_scored.json) contains the judgments, summary, routing counts, source-file hashes, and limitations. All 24 questions ran under both models and retrieval configurations without recorded generation errors. Of 96 responses, 44 came from models, 28 from shared preflight, and 24 from evidence-gap handling. Only nine model-backed migration questions (Q02–Q10) contribute to the migration totals below.
+
+| Model | Baseline migration score | Version-aware migration score | Baseline citations supplied | Version-aware citations supplied |
+| --- | ---: | ---: | ---: | ---: |
+| Qwen3 1.7B | 16/18 | 13/18 | 7/9 | 6/9 |
+| Qwen2.5 Coder 1.5B | 11/18 | 10/18 | 0/9 | 0/9 |
+
+All supplied citations in these nine cases were judged to point to supporting official sources; citation coverage is reported separately from correctness among citations supplied. All four model/configuration combinations correctly left Q17 unchanged. Q18, Q21, and Q24 passed the approved action labels through shared deterministic preflight and are excluded from model totals. Q22 produced model answers but has no approved gold label, so it is not scored.
+
+A diagnostic check found the selected target passage in the top two retrieval results for 10/11 evidence-covered questions with baseline retrieval and 11/11 with version-aware retrieval. Despite that retrieval improvement, version-aware generation scored lower in this run. Common errors included `ignore_index=True` discarding indices, `df.items` used without a call, and incorrect dtype or datetime examples. These results are limited to a small curated corpus and nine scored migrations; they do not establish a general ranking of the systems.
+
 ## Project status
 
-The 24-question dataset, a non-executing prototype, nine cross-version behavioral fixtures, an open-model comparison harness, and a reviewed six-question retrieval pilot are present. A 24-question retrieval harness and 13 approved gold labels are ready for a larger model run. A broader documentation index and larger manually scored evaluation remain planned. See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the build order and evaluation details.
+The 24-question dataset, a non-executing prototype, nine cross-version behavioral fixtures, an open-model comparison harness, a reviewed six-question pilot, and a reviewed expanded run are present. Thirteen gold labels are approved. A broader documentation index and additional manually labeled cases remain planned. See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the build order and evaluation details.

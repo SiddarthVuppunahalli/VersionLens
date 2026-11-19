@@ -1,0 +1,40 @@
+{"model":"qwen3:1.7b","configuration":"baseline","id":"Q02","migration_score":2,"citation_correct":true,"note":"Index-preserving concat; official 2.0 concat citation."}
+{"model":"qwen3:1.7b","configuration":"baseline","id":"Q03","migration_score":1,"citation_correct":true,"note":"Names items but example uses df.items without calling it and invents output."}
+{"model":"qwen3:1.7b","configuration":"baseline","id":"Q04","migration_score":1,"citation_correct":true,"note":"Uses nullable Int64 extension dtype, not the original int64 dtype."}
+{"model":"qwen3:1.7b","configuration":"baseline","id":"Q05","migration_score":2,"citation_correct":null,"note":"Correct DatetimeIndex and Series forms; no source URL."}
+{"model":"qwen3:1.7b","configuration":"baseline","id":"Q06","migration_score":2,"citation_correct":true,"note":"Correct replacement and official release-note URL."}
+{"model":"qwen3:1.7b","configuration":"baseline","id":"Q07","migration_score":2,"citation_correct":true,"note":"Correct keyword, newline, and official release-note URL."}
+{"model":"qwen3:1.7b","configuration":"baseline","id":"Q08","migration_score":2,"citation_correct":true,"note":"Correct assignment and removal of inplace."}
+{"model":"qwen3:1.7b","configuration":"baseline","id":"Q09","migration_score":2,"citation_correct":true,"note":"Correct on_bad_lines='warn'; skip is identified as a silent alternative."}
+{"model":"qwen3:1.7b","configuration":"baseline","id":"Q10","migration_score":2,"citation_correct":null,"note":"Shows correct pandas 2.0 squeeze('columns') path; old call is contextual. No URL."}
+{"model":"qwen3:1.7b","configuration":"baseline","id":"Q17","action_correct":true,"note":"Correct no-change decision."}
+{"model":"qwen3:1.7b","configuration":"version_aware","id":"Q02","migration_score":2,"citation_correct":true,"note":"Index-preserving concat and supporting official URL."}
+{"model":"qwen3:1.7b","configuration":"version_aware","id":"Q03","migration_score":1,"citation_correct":null,"note":"Example uses df.items without calling it; no URL."}
+{"model":"qwen3:1.7b","configuration":"version_aware","id":"Q04","migration_score":1,"citation_correct":true,"note":"Nullable Int64 extension dtype differs from original int64."}
+{"model":"qwen3:1.7b","configuration":"version_aware","id":"Q05","migration_score":1,"citation_correct":null,"note":"Mentions correct API but examples misuse Series/Index methods and obsolete Int64Index; no URL."}
+{"model":"qwen3:1.7b","configuration":"version_aware","id":"Q06","migration_score":2,"citation_correct":true,"note":"Correct replacement and official URL."}
+{"model":"qwen3:1.7b","configuration":"version_aware","id":"Q07","migration_score":2,"citation_correct":true,"note":"Correct keyword, newline, and official URL."}
+{"model":"qwen3:1.7b","configuration":"version_aware","id":"Q08","migration_score":1,"citation_correct":true,"note":"Code is correct but explanation falsely says set_axis itself was removed; only inplace was removed."}
+{"model":"qwen3:1.7b","configuration":"version_aware","id":"Q09","migration_score":2,"citation_correct":true,"note":"Correct on_bad_lines='warn' and supporting URL."}
+{"model":"qwen3:1.7b","configuration":"version_aware","id":"Q10","migration_score":1,"citation_correct":null,"note":"Mentions squeeze('columns') but executable example uses squeeze(), which returns a scalar for a one-row file; no URL."}
+{"model":"qwen3:1.7b","configuration":"version_aware","id":"Q17","action_correct":true,"note":"Correct no-change decision."}
+{"model":"qwen2.5-coder:1.5b","configuration":"baseline","id":"Q02","migration_score":0,"citation_correct":null,"note":"ignore_index=True discards the indices it claims to preserve; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"baseline","id":"Q03","migration_score":1,"citation_correct":null,"note":"Correct items() replacement but fabricated example output omits Series values; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"baseline","id":"Q04","migration_score":2,"citation_correct":null,"note":"Explicit int64 dtype preserves the fixture; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"baseline","id":"Q05","migration_score":1,"citation_correct":null,"note":"Correct isocalendar idea but example calls .dt on a DatetimeIndex; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"baseline","id":"Q06","migration_score":2,"citation_correct":null,"note":"Correct replacement; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"baseline","id":"Q07","migration_score":1,"citation_correct":null,"note":"Correct code but explanation contradicts it by calling removed line_terminator recommended; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"baseline","id":"Q08","migration_score":0,"citation_correct":null,"note":"Keeps unsupported inplace=True, so proposed code fails; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"baseline","id":"Q09","migration_score":2,"citation_correct":null,"note":"Correct on_bad_lines='warn'; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"baseline","id":"Q10","migration_score":2,"citation_correct":null,"note":"Correct read_csv followed by squeeze('columns'); no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"baseline","id":"Q17","action_correct":true,"note":"Correct no-change decision."}
+{"model":"qwen2.5-coder:1.5b","configuration":"version_aware","id":"Q02","migration_score":0,"citation_correct":null,"note":"ignore_index=True discards original indices; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"version_aware","id":"Q03","migration_score":1,"citation_correct":null,"note":"Correct items() replacement but fabricated output treats Series as scalars; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"version_aware","id":"Q04","migration_score":1,"citation_correct":null,"note":"dtype=int becomes int32 in pinned Windows pandas environment, not explicit int64; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"version_aware","id":"Q05","migration_score":1,"citation_correct":null,"note":"Correct isocalendar idea but example calls .dt on a DatetimeIndex; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"version_aware","id":"Q06","migration_score":2,"citation_correct":null,"note":"Correct replacement; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"version_aware","id":"Q07","migration_score":1,"citation_correct":null,"note":"Correct code but explanation incorrectly says removed line_terminator should be used; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"version_aware","id":"Q08","migration_score":0,"citation_correct":null,"note":"Keeps unsupported inplace=True; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"version_aware","id":"Q09","migration_score":2,"citation_correct":null,"note":"Correct on_bad_lines='warn'; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"version_aware","id":"Q10","migration_score":2,"citation_correct":null,"note":"Correct conditional squeeze('columns') for one-column input; no URL."}
+{"model":"qwen2.5-coder:1.5b","configuration":"version_aware","id":"Q17","action_correct":true,"note":"Correct no-change decision."}

@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 .venv/
 .venv*/
+results/expanded_score_sheet_proposed.csv
