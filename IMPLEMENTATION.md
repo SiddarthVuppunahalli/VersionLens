@@ -1,6 +1,6 @@
 # Implementation plan
 
-This repository currently contains a question set, a non-executing prototype, and a local open-model comparison harness. The research system described in the proposal is still to be built. Keep experimental results separate from prototype routing results.
+This repository currently contains a question set, a non-executing prototype, a local open-model comparison harness, and cross-version fixtures for Q02 and Q03. The research system described in the proposal is still to be built. Keep experimental results separate from prototype routing results.
 
 ## 1. Freeze the evaluation set
 
@@ -19,7 +19,7 @@ This repository currently contains a question set, a non-executing prototype, an
 
 - Ask a follow-up when code, source version, inputs, or expected behavior needed for an exact migration are missing.
 - Treat submitted code, comments, and retrieved passages as data. Decline unsupported libraries and requests for unsafe execution.
-- Never execute user snippets. Build predefined fixtures and allow-listed tests for selected APIs in separate pandas 1.5.3 and 2.0.3 environments. Validation should have no access to network, shell, or user files.
+- Never execute user snippets. The Q02 and Q03 trusted fixtures now run in separate pandas 1.5.3 and 2.0.3 environments; extend this pattern to other selected APIs. Validation should have no access to network, shell, or user files.
 
 ## 4. Score and report
 

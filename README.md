@@ -78,6 +78,21 @@ python run_demo.py --all
 
 The last command writes all 24 responses and routing counts to `results/prototype.json`. The prototype uses verified response templates for a few cases and asks for clarification on others. It does not execute submitted code.
 
+## Run cross-version behavior tests
+
+These trusted fixtures compare Q02 (`Series.append` to `pd.concat`) and Q03 (`DataFrame.iteritems` to `items`) under their respective pandas versions. On Windows with Python 3.10 or 3.11:
+
+```powershell
+python -m venv .venv15
+python -m venv .venv20
+.\.venv15\Scripts\python.exe -m pip install -r requirements\pandas15.txt
+.\.venv20\Scripts\python.exe -m pip install -r requirements\pandas20.txt
+python run_behavior_tests.py
+python -m unittest discover -s tests -v
+```
+
+The runner writes `results/behavior_validation.json`, including both environment versions, values, labels, dtypes, and shapes. Q02 deliberately includes duplicate index labels and a wrong `ignore_index=True` negative control; the run fails if that wrong output is not distinguishable. Only predefined fixtures run. This verifies two specific migrations, not arbitrary submitted code or the model-generated response.
+
 ## Compare open models
 
 The model comparison runner calls a local [Ollama](https://ollama.com/download/windows) server. On a CPU-only Windows machine, start with small quantized, Apache-licensed models such as `qwen3:1.7b` and `qwen2.5-coder:1.5b`; larger models may be slow or require more memory. Download the models once:
@@ -94,4 +109,4 @@ The runner saves outputs, latency, finish reason, and generated-token count to `
 
 ## Project status
 
-The 24-question dataset, a non-executing prototype, a saved prototype run, and the open-model comparison harness are present. The full baseline RAG and version-aware RAG systems, isolated behavioral tests, and manually scored model results are planned. See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the build order and evaluation details.
+The 24-question dataset, a non-executing prototype, a saved prototype run, two cross-version behavioral fixtures, and the open-model comparison harness are present. The full baseline RAG and version-aware RAG systems, broader behavioral tests, and manually scored model results are planned. See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the build order and evaluation details.
