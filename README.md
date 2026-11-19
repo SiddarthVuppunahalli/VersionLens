@@ -122,6 +122,10 @@ python make_score_sheet.py --run results/rag_pilot.json --output results/pilot_s
 
 The baseline ranks all corpus records by semantic embedding similarity. The version-aware path filters to pandas 2.0.3 and combines semantic similarity with token and parsed API-call matching. Both use the same corpus, embedding model, top-two passage budget, generator model, and generation settings. Both also share the same preflight rule for missing context, out-of-scope requests, and unsafe code; those records show `model_called: false`. The run files preserve retrieved passage IDs and URLs for inspection. The score sheet leaves correctness fields blank for human review; it does not score models automatically.
 
+### Reviewed pilot outcome
+
+The project owner reviewed the uploaded pilot run's scores. The [reviewed score record](results/pilot_scored.json) includes per-case judgments, source-file hashes, and limitations. Across the two model-backed migration questions (Q02 and Q03), Qwen3 scored 3/4 points with baseline retrieval and 4/4 with version-aware retrieval. Qwen 2.5 Coder scored 1/4 in both configurations. Qwen3 supplied supporting citations for both migration answers in both configurations; Qwen 2.5 Coder supplied none. All four model/configuration combinations answered the unchanged-code case correctly. The three clarification, scope, and unsafe-code cases were handled by the same preflight rules and are excluded from model averages. This small pilot does not establish a general performance advantage.
+
 ## Project status
 
-The 24-question dataset, a non-executing prototype, two cross-version behavioral fixtures, an open-model comparison harness, and a six-question retrieval pilot are present. The pilot labels are approved. A larger documentation index, broader behavioral tests, and manually scored results are planned. See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the build order and evaluation details.
+The 24-question dataset, a non-executing prototype, two cross-version behavioral fixtures, an open-model comparison harness, and a reviewed six-question retrieval pilot are present. A larger documentation index, broader behavioral tests, and a larger manually scored evaluation are planned. See [IMPLEMENTATION.md](IMPLEMENTATION.md) for the build order and evaluation details.

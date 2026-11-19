@@ -1,0 +1,39 @@
+{
+  "status": "project_owner_approved",
+  "source_run_sha256": "7A6762C092F0314DCD2FA29D11FC85332BAD60A5E63D73121D2CCA82EF492655",
+  "source_retrieval_sha256": "C0C60BC0FF4E3CEB9F2B953A5741389CAC8F6D4094CF8D89FEC29523053BFCF2",
+  "source_score_sheet_sha256": "E3B73574286E6D4D4E2FFB07A634F7C93E2F50950A4F3118879356A51D17A901",
+  "evaluation_set": ["Q02", "Q03", "Q17", "Q18", "Q21", "Q24"],
+  "model_backed_scores": [
+    {"model": "qwen3:1.7b", "configuration": "baseline", "id": "Q02", "migration_score": 2, "citation_present": true, "citation_correct": true, "note": "Correct index-preserving concat. Cites a different official 2.0.3 concat page that supports the claim."},
+    {"model": "qwen3:1.7b", "configuration": "baseline", "id": "Q03", "migration_score": 1, "citation_present": true, "citation_correct": true, "note": "Names items but example uses df.items without calling it and invents an output."},
+    {"model": "qwen3:1.7b", "configuration": "baseline", "id": "Q17", "action_correct": true, "note": "Correctly leaves the shown groupby expression unchanged."},
+    {"model": "qwen3:1.7b", "configuration": "version_aware", "id": "Q02", "migration_score": 2, "citation_present": true, "citation_correct": true, "note": "Correct index-preserving concat and supporting official 2.0.3 source."},
+    {"model": "qwen3:1.7b", "configuration": "version_aware", "id": "Q03", "migration_score": 2, "citation_present": true, "citation_correct": true, "note": "Correct df.items() replacement and supporting official release notes."},
+    {"model": "qwen3:1.7b", "configuration": "version_aware", "id": "Q17", "action_correct": true, "note": "Correctly leaves the shown groupby expression unchanged."},
+    {"model": "qwen2.5-coder:1.5b", "configuration": "baseline", "id": "Q02", "migration_score": 0, "citation_present": false, "citation_correct": null, "note": "Uses ignore_index=True, discarding the indices it claims to preserve."},
+    {"model": "qwen2.5-coder:1.5b", "configuration": "baseline", "id": "Q03", "migration_score": 1, "citation_present": false, "citation_correct": null, "note": "Replacement code is correct but the claimed example output omits values."},
+    {"model": "qwen2.5-coder:1.5b", "configuration": "baseline", "id": "Q17", "action_correct": true, "note": "Correctly leaves the shown groupby expression unchanged."},
+    {"model": "qwen2.5-coder:1.5b", "configuration": "version_aware", "id": "Q02", "migration_score": 0, "citation_present": false, "citation_correct": null, "note": "Uses ignore_index=True and incorrectly calls the Series result a DataFrame."},
+    {"model": "qwen2.5-coder:1.5b", "configuration": "version_aware", "id": "Q03", "migration_score": 1, "citation_present": false, "citation_correct": null, "note": "Replacement code is correct but the claimed output treats Series values as scalars."},
+    {"model": "qwen2.5-coder:1.5b", "configuration": "version_aware", "id": "Q17", "action_correct": true, "note": "Correctly leaves the shown groupby expression unchanged."}
+  ],
+  "shared_preflight": {
+    "ids": ["Q18", "Q21", "Q24"],
+    "correct_actions": 3,
+    "total_actions": 3,
+    "note": "The same deterministic answers were reused for both models and both retrieval configurations; they are excluded from model averages."
+  },
+  "summary": [
+    {"model": "qwen3:1.7b", "configuration": "baseline", "migration_points": 3, "migration_points_possible": 4, "unchanged_action_correct": 1, "required_citations_present": 2, "required_citations_possible": 2, "cited_sources_correct": 2, "cited_sources_checked": 2},
+    {"model": "qwen3:1.7b", "configuration": "version_aware", "migration_points": 4, "migration_points_possible": 4, "unchanged_action_correct": 1, "required_citations_present": 2, "required_citations_possible": 2, "cited_sources_correct": 2, "cited_sources_checked": 2},
+    {"model": "qwen2.5-coder:1.5b", "configuration": "baseline", "migration_points": 1, "migration_points_possible": 4, "unchanged_action_correct": 1, "required_citations_present": 0, "required_citations_possible": 2, "cited_sources_correct": 0, "cited_sources_checked": 0},
+    {"model": "qwen2.5-coder:1.5b", "configuration": "version_aware", "migration_points": 1, "migration_points_possible": 4, "unchanged_action_correct": 1, "required_citations_present": 0, "required_citations_possible": 2, "cited_sources_correct": 0, "cited_sources_checked": 0}
+  ],
+  "limitations": [
+    "Only six pilot questions and two migration cases were evaluated.",
+    "The corpus contains curated summaries rather than full documentation passages.",
+    "Citation correctness is undefined for a response with no citation; coverage is reported separately.",
+    "Behavioral-equivalence tests were run on fixed reference migrations, not on generated code."
+  ]
+}
