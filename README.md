@@ -88,7 +88,7 @@ ollama pull qwen2.5-coder:1.5b
 python run_models.py --models qwen3:1.7b qwen2.5-coder:1.5b --ids Q02 Q18 Q21 Q24
 ```
 
-The runner saves model outputs and latency to `results/model_comparison.json` using the same prompt and generation settings. Run without `--ids` for all 24 questions. This experiment compares raw model responses; human grading is still required. Ollama is optional, and no model calls have been made in this repository yet. The scripts can also run in a Colab environment with an Ollama server available there.
+The runner saves model outputs, latency, finish reason, and generated-token count to `results/model_comparison.json` using the same prompt and generation settings. It requests a final answer without a separate thinking trace and marks empty answers as errors. Run without `--ids` for all 24 questions. This experiment compares raw model responses; human grading is still required. Ollama is optional. The scripts can also run in a Colab environment with an Ollama server available there.
 
 ## Project status
 

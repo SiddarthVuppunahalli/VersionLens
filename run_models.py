@@ -18,15 +18,16 @@ For version-specific claims, cite an official pandas URL if you know one; otherw
 that documentation verification is needed. Keep the response concise."""
 
 
-def call_ollama(base_url: str, model: str, question: str, timeout: int) -> tuple[str, float]:
+def call_ollama(base_url: str, model: str, question: str, timeout: int, num_predict: int) -> tuple[dict, float]:
     payload = {
         "model": model,
         "stream": False,
+        "think": False,
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": question},
         ],
-        "options": {"temperature": 0, "seed": 42, "num_predict": 350},
+        "options": {"temperature": 0, "seed": 42, "num_predict": num_predict},
     }
     request = urllib.request.Request(
         base_url.rstrip("/") + "/api/chat",
@@ -36,7 +37,7 @@ def call_ollama(base_url: str, model: str, question: str, timeout: int) -> tuple
     start = time.monotonic()
     with urllib.request.urlopen(request, timeout=timeout) as response:
         body = json.load(response)
-    return body["message"]["content"], round(time.monotonic() - start, 3)
+    return body, round(time.monotonic() - start, 3)
 
 
 def main() -> None:
@@ -45,6 +46,7 @@ def main() -> None:
     parser.add_argument("--ids", nargs="+", help="Subset of question IDs; default is all 24")
     parser.add_argument("--base-url", default="http://localhost:11434")
     parser.add_argument("--timeout", type=int, default=300)
+    parser.add_argument("--num-predict", type=int, default=700)
     parser.add_argument("--output", type=Path, default=Path("results/model_comparison.json"))
     args = parser.parse_args()
     selected = [row for row in questions() if not args.ids or row["id"] in args.ids]
@@ -55,16 +57,22 @@ def main() -> None:
         for row in selected:
             print(f"{model} {row['id']}", flush=True)
             try:
-                response, seconds = call_ollama(args.base_url, model, row["query"], args.timeout)
-                record = {"model": model, "id": row["id"], "response": response, "latency_seconds": seconds, "error": None}
+                body, seconds = call_ollama(args.base_url, model, row["query"], args.timeout, args.num_predict)
+                response = body["message"].get("content", "")
+                record = {
+                    "model": model, "id": row["id"], "response": response,
+                    "latency_seconds": seconds, "done_reason": body.get("done_reason"),
+                    "eval_count": body.get("eval_count"),
+                    "error": None if response.strip() else "empty answer",
+                }
             except (urllib.error.URLError, TimeoutError, KeyError, ValueError) as exc:
-                record = {"model": model, "id": row["id"], "response": None, "latency_seconds": None, "error": str(exc)}
+                record = {"model": model, "id": row["id"], "response": None, "latency_seconds": None, "done_reason": None, "eval_count": None, "error": str(exc)}
             records.append(record)
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(json.dumps({
                 "created_utc": datetime.now(timezone.utc).isoformat(),
                 "dataset": "data/questions.jsonl",
-                "configuration": "same prompt, temperature=0, seed=42, num_predict=350; no retrieval or code execution",
+                "configuration": f"same prompt, temperature=0, seed=42, think=false, num_predict={args.num_predict}; no retrieval or code execution",
                 "model_outputs": records,
                 "human_scores": "pending",
             }, indent=2) + "\n", encoding="utf-8")
