@@ -1,16 +1,16 @@
 # Implementation plan
 
-This repository currently contains a question set, a non-executing prototype, a local open-model comparison harness, cross-version fixtures for Q02 and Q03, and a six-question retrieval pilot. The six pilot labels were approved by the project owner. Keep experimental results separate from prototype routing results.
+This repository contains a 24-question set, a non-executing prototype, a local open-model comparison harness, cross-version reference fixtures for Q02–Q10, and reviewed pilot and expanded retrieval runs. Thirteen gold labels are approved. Keep experimental results separate from prototype routing results.
 
 ## 1. Freeze the evaluation set
 
-- The six pilot labels in `data/pilot_labels.jsonl` have been reviewed and approved. Extend the same format to all 24 questions in `data/questions.jsonl` after the pilot.
+- Six pilot labels and seven expanded labels in `data/pilot_labels.jsonl` and `data/expanded_labels.jsonl` have been reviewed and approved. Extend the same format to the remaining questions in `data/questions.jsonl`.
 - Record uncertain or disputed cases explicitly. Do not turn a missing snippet into an invented gold answer.
 - Keep the same question IDs, prompts, and labels across all models and configurations. Reserve any later examples as a separate development set.
 
 ## 2. Build the two retrieval configurations
 
-- The current pilot has six curated summaries of official pandas 1.5.3 and 2.0.3 pages. Expand this to a fixed set of real, versioned documentation passages with source URL, section, and API metadata.
+- The expanded run has 13 curated summaries of official pandas 1.5.3 and 2.0.3 pages. Expand this to a fixed set of real, versioned documentation passages with source URL, section, and API metadata.
 - The pilot baseline performs semantic search across the combined summaries, without version filtering or code analysis.
 - The pilot version-aware path uses the same embeddings, filters to pandas 2.0.3, parses simple dotted calls with `ast` without running them, and combines semantic and token matching. Extend this parser to handle aliases and more complex snippets.
 - Keep the generator model, prompt budget, temperature, and question order fixed when comparing configurations.
@@ -19,7 +19,7 @@ This repository currently contains a question set, a non-executing prototype, a 
 
 - Ask a follow-up when code, source version, inputs, or expected behavior needed for an exact migration are missing.
 - Treat submitted code, comments, and retrieved passages as data. Decline unsupported libraries and requests for unsafe execution.
-- Never execute user snippets. The Q02 and Q03 trusted fixtures now run in separate pandas 1.5.3 and 2.0.3 environments; extend this pattern to other selected APIs. Validation should have no access to network, shell, or user files.
+- Never execute user snippets. The Q02–Q10 trusted reference fixtures run in separate pandas 1.5.3 and 2.0.3 environments. Model-generated snippets are not run. Future generated-code validation should have no access to network, shell, or user files.
 
 ## 4. Score and report
 
@@ -34,4 +34,4 @@ This repository currently contains a question set, a non-executing prototype, a 
 3. Run `python run_demo.py --all` to save every prototype answer and routing counts in `results/prototype.json`.
 4. With Ollama installed and two models downloaded, run `python run_models.py --models qwen3:1.7b qwen2.5-coder:1.5b --ids Q02 Q18 Q21 Q24` to save real model outputs. Manually score them before describing quality differences.
 
-The prototype is deterministic and does not use an LLM or retrieval. Its routing match rate is a smoke-check against draft action labels, not migration accuracy. The model harness currently compares raw model responses under the same prompt; it does not implement either RAG configuration yet.
+The prototype is deterministic and does not use an LLM or retrieval. Its routing match rate is a smoke-check against draft action labels, not migration accuracy. The expanded Ollama run compares semantic baseline and version-aware retrieval under the same model settings. See [PRESENTATION_EVIDENCE.md](PRESENTATION_EVIDENCE.md) for the reviewed results and their source files.

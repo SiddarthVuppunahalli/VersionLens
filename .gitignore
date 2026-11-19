@@ -3,3 +3,4 @@ __pycache__/
 .venv/
 .venv*/
 results/expanded_score_sheet_proposed.csv
+presentation_evidence.zip
